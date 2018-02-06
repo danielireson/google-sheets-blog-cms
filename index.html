@@ -16,14 +16,7 @@
 		<div class="information">
 			Lorem ipsum dolor sit amet, <a href="#">something</a> adipisicing elit. Nostrum maxime magni ipsa dicta alias provident velit neque necessitatibus ad rerum, odit porro voluptatum quibusdam non, consectetur quae amet, eos fuga!
 		</div>
-		<nav>
-			<span>Filter posts by category</span>
-			<a href="#" class="button selected">No filter</a>
-			<a href="#" class="button">General</a>
-			<a href="#" class="button">Marketing</a>
-			<a href="#" class="button">Financials</a>
-			<a href="#" class="button">Technology</a>
-		</nav>
+		<nav id="filter"></nav>
 		<article>
 			<h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, aspernatur.</h2>
 			<div class="article-details">
@@ -34,68 +27,16 @@
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, magnam?</p>
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor labore culpa, velit vitae reiciendis officia inventore dolore, porro odit vel nobis dolorum nulla, id commodi ipsam ipsum distinctio laudantium ex!</p>
 		</article>
-		<article>
-			<h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, aspernatur.</h2>
-			<div class="article-details">
-				<span>
-					 By John Doe on 24th January
-				</span>
-				<span>
-					Posted in <a href="#" class="button">General</a>
-				</span>
-			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti eius ducimus odio nemo deserunt, totam dolorem maiores sint autem recusandae quos porro incidunt voluptatum iste explicabo! Neque consequatur beatae itaque ab inventore nostrum laudantium aliquam cupiditate optio officia maxime perspiciatis, debitis magni, quasi ea nemo nesciunt fugiat laboriosam tempore, vel.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, magnam?</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor labore culpa, velit vitae reiciendis officia inventore dolore, porro odit vel nobis dolorum nulla, id commodi ipsam ipsum distinctio laudantium ex!</p>
-		</article>
-		<article>
-			<h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, aspernatur.</h2>
-			<div class="article-details">
-				<div>
-					By John Doe on 24th January
-				</div>
-				<div>
-					Posted in <a href="#" class="button">General</a>
-				</div>
-			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti eius ducimus odio nemo deserunt, totam dolorem maiores sint autem recusandae quos porro incidunt voluptatum iste explicabo! Neque consequatur beatae itaque ab inventore nostrum laudantium aliquam cupiditate optio officia maxime perspiciatis, debitis magni, quasi ea nemo nesciunt fugiat laboriosam tempore, vel.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, magnam?</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor labore culpa, velit vitae reiciendis officia inventore dolore, porro odit vel nobis dolorum nulla, id commodi ipsam ipsum distinctio laudantium ex!</p>
-		</article>
-		<article>
-			<h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, aspernatur.</h2>
-			<div class="article-details">
-				<span>
-					 By John Doe on 24th January
-				</span>
-				<span>
-					Posted in <a href="#" class="button">General</a>
-				</span>
-			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti eius ducimus odio nemo deserunt, totam dolorem maiores sint autem recusandae quos porro incidunt voluptatum iste explicabo! Neque consequatur beatae itaque ab inventore nostrum laudantium aliquam cupiditate optio officia maxime perspiciatis, debitis magni, quasi ea nemo nesciunt fugiat laboriosam tempore, vel.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, magnam?</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor labore culpa, velit vitae reiciendis officia inventore dolore, porro odit vel nobis dolorum nulla, id commodi ipsam ipsum distinctio laudantium ex!</p>
-		</article>
-		<article>
-			<h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, aspernatur.</h2>
-			<div class="article-details">
-				<span>
-					 By John Doe on 24th January
-				</span>
-				<span>
-					Posted in <a href="#" class="button">General</a>
-				</span>
-			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti eius ducimus odio nemo deserunt, totam dolorem maiores sint autem recusandae quos porro incidunt voluptatum iste explicabo! Neque consequatur beatae itaque ab inventore nostrum laudantium aliquam cupiditate optio officia maxime perspiciatis, debitis magni, quasi ea nemo nesciunt fugiat laboriosam tempore, vel.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum, magnam?</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor labore culpa, velit vitae reiciendis officia inventore dolore, porro odit vel nobis dolorum nulla, id commodi ipsam ipsum distinctio laudantium ex!</p>
-		</article>
 
-		<div id="notice">No more posts to display</div>
+		<div id="notice"></div>
 	</main>
 	<footer>
 		<p>These blog posts are from a Google Sheets backend</p>
 		<a href="#">Read the article on Medium</a>
 	</footer>
+	<script src="/js/main.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', app.init);
+	</script>
 </body>
 </html>
