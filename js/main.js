@@ -11,6 +11,9 @@ var app = function () {
 	function init () {
 		_setNotice('Loading posts');
 
+		var filter = document.getElementById('filter');
+		_buildFilter(filter);
+
 		var requestUrl = _buildApiUrl(1, null);
 		_getRequest(requestUrl, function (error, data) {
 			if (error) {
@@ -23,12 +26,13 @@ var app = function () {
 				_setNotice(response.message);
 			}
 
-			state.posts = response.data
-			
-		})
+			state.posts = response.data;
 
-		var filter = document.getElementById('filter');
-		_buildFilter(filter);
+			var container = document.getElementById('container');
+			_renderPosts(container);
+
+			_setNotice('No more posts to display');
+		})
 	}
 
 	function _getRequest(url, callback) {
@@ -44,10 +48,6 @@ var app = function () {
 	}
 
 	function _buildFilter (filter) {
-		var title = document.createElement('span');
-	    title.innerHTML = 'Filter posts by category';
-	    filter.appendChild(title);
-
 	    filter.appendChild(_buildFilterLink('no filter', true));
 
 	    categories.forEach(function (category) {
@@ -76,6 +76,41 @@ var app = function () {
 	function _setNotice (label) {
 		var notice = document.getElementById('notice');
 		notice.innerHTML = label;
+	}
+
+	function _renderPosts (container) {
+		state.posts.forEach(function (post) {
+			var template = document.getElementById('article-template').innerHTML;
+
+			template = template.replace('{{ title }}', post.title);
+			template = template.replace('{{ author }}', post.author);
+			template = template.replace('{{ date }}', _formatDate(post.timestamp));
+			template = template.replace('{{ category }}', post.category);
+			template = template.replace('{{ content }}', _formatContent(post.content));
+
+			var article = document.createElement('article');
+			article.innerHTML = template;
+			container.appendChild(article);
+		});
+	}
+
+	function _formatDate (string) {
+		return new Date(string).toLocaleDateString('en-GB');
+	}
+
+	function _formatContent (string) {
+		return string.split('\n')
+			.filter(_hasContent)
+			.map(_wrapParagraphTags)
+			.join('');
+	}
+
+	function _hasContent (string) {
+		return string !== '';
+	}
+
+	function _wrapParagraphTags (string) {
+		return '<p>' + string + '</p>';
 	}
 
 	function _getActiveCategory () {

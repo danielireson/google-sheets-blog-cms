@@ -107,6 +107,10 @@ footer p {
 		justify-content: space-between;
 	}
 
+	.article-details div:first-child {
+		margin-bottom: 0;
+	}
+
 	header, main, footer {
 		padding: 4em 25%;
 	}
