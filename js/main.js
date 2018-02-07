@@ -4,6 +4,7 @@ var app = function () {
 	var categories = ['general', 'financial', 'technology', 'marketing'];
 
 	var state = {
+		activePage: 1,
 		activeCategory: null,
 		posts: []
 	};
@@ -14,7 +15,11 @@ var app = function () {
 		var filter = document.getElementById('filter');
 		_buildFilter(filter);
 
-		var requestUrl = _buildApiUrl(1, null);
+		_getPosts(state.activePage, state.activeCategory);
+	}
+
+	function _getPosts(page, category) {
+		var requestUrl = _buildApiUrl(page, category);
 		_getRequest(requestUrl, function (error, data) {
 			if (error) {
 				_setNotice('Unexpected error loading posts');
