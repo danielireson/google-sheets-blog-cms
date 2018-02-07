@@ -3,20 +3,21 @@ const app = function () {
 	const API_KEY = 'abcdef';
 	const CATEGORIES = ['general', 'financial', 'technology', 'marketing'];
 
-	const state = {
-		activePage: 1
-	};
+	const state = {activePage: 1};
+	const page = {};
 
 	function init () {
+		page.notice = document.getElementById('notice');
+		page.filter = document.getElementById('filter');
+		page.container = document.getElementById('container');
+
 		_buildFilter();
 		_getPosts(null);
 	}
 
 	function _getPosts(category) {
 		_setNotice('Loading posts');
-
-		const container = document.getElementById('container');
-		container.innerHTML = '';
+		page.container.innerHTML = '';
 
 		fetch(_buildApiUrl(state.activePage, category))
 			.then((response) => response.json())
@@ -34,11 +35,10 @@ const app = function () {
 	}
 
 	function _buildFilter () {
-		const filter = document.getElementById('filter');
-	    filter.appendChild(_buildFilterLink('no filter', true));
+	    page.filter.appendChild(_buildFilterLink('no filter', true));
 
 	    CATEGORIES.forEach(function (category) {
-	    	filter.appendChild(_buildFilterLink(category));
+	    	page.filter.appendChild(_buildFilterLink(category));
 	    });
 	}
 
@@ -66,13 +66,10 @@ const app = function () {
 	}
 
 	function _setNotice (label) {
-		const notice = document.getElementById('notice');
-		notice.innerHTML = label;
+		page.notice.innerHTML = label;
 	}
 
 	function _renderPosts (posts) {
-		const container = document.getElementById('container');
-
 		posts.forEach(function (post) {
 			const article = document.createElement('article');
 			article.innerHTML = `
@@ -83,7 +80,7 @@ const app = function () {
 				</div>
 				${_formatContent(post.content)}
 			`;
-			container.appendChild(article);
+			page.container.appendChild(article);
 		});
 	}
 
