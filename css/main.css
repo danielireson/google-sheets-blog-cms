@@ -20,19 +20,20 @@ img {
 	max-width: 100%;
 }
 
-.button {
+button {
 	border-radius: 5px;
 	border: solid 1px #b2bec3;
+	cursor: pointer;
 	display: inline-block;
 	padding: 0.2em 0.5em;
 }
 
-.button:hover {
+button:hover {
 	background: #dfe6e9; 	
 	border-color: #b2bec3;
 }
 
-.button.selected {
+button.selected {
 	background: #2d3436;
 	border: 1px solid #2d3436;
 	color: white;
@@ -68,7 +69,7 @@ nav span {
 	margin-bottom: 1em;
 }
 
-nav .button {
+nav button {
 	margin: 0 0.5em 1em 0;
 }
 
