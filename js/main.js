@@ -1,30 +1,24 @@
-var app = function () {
-	var apiBaseUrl = 'https://script.google.com/macros/s/AKfycbyP5Rifn7Q05Qcd7CTfm-AOouFHHvUAvCVVuKSfQu-LCqJocP8/exec';
-	var apiKey = 'abcdef';
-	var categories = ['general', 'financial', 'technology', 'marketing'];
+const app = function () {
+	const API_BASE = 'https://script.google.com/macros/s/AKfycbyP5Rifn7Q05Qcd7CTfm-AOouFHHvUAvCVVuKSfQu-LCqJocP8/exec';
+	const API_KEY = 'abcdef';
+	const CATEGORIES = ['general', 'financial', 'technology', 'marketing'];
 
-	var state = {
-		activePage: 1,
-		activeCategory: null,
+	const state = {
+		activePage: 1
 	};
 
 	function init () {
-		_setNotice('Loading posts');
-
-		var filter = document.getElementById('filter');
-		_buildFilter(filter);
-
-		_getPosts();
+		_buildFilter();
+		_getPosts(null);
 	}
 
-	function _getPosts() {
+	function _getPosts(category) {
 		_setNotice('Loading posts');
-		
-		var container = document.getElementById('container');
+
+		const container = document.getElementById('container');
 		container.innerHTML = '';
 
-		var requestUrl = _buildApiUrl(state.activePage, state.activeCategory);
-		fetch(requestUrl)
+		fetch(_buildApiUrl(state.activePage, category))
 			.then((response) => response.json())
 			.then((json) => {
 				if (json.status !== 'success') {
@@ -39,30 +33,32 @@ var app = function () {
 			})
 	}
 
-	function _buildFilter (filter) {
+	function _buildFilter () {
+		const filter = document.getElementById('filter');
 	    filter.appendChild(_buildFilterLink('no filter', true));
 
-	    categories.forEach(function (category) {
+	    CATEGORIES.forEach(function (category) {
 	    	filter.appendChild(_buildFilterLink(category));
 	    });
 	}
 
 	function _buildFilterLink (label, isSelected) {
-		var link = document.createElement('button');
+		const link = document.createElement('button');
 	  	link.className = isSelected ? 'button selected' : 'button';
 	  	link.innerHTML = _capitalize(label);
 	  	link.onclick = function (event) {
 	  		_resetActivePage();
-	  		_setActiveCategory(label);
-	  		_getPosts();
+
+	  		let category = label === 'no filter' ? null : label.toLowerCase();
+	  		_getPosts(category);
 	  	};
 
 	  	return link;
 	}
 
 	function _buildApiUrl (page, category) {
-		var url = apiBaseUrl;
-		url += '?key=' + apiKey;
+		let url = API_BASE;
+		url += '?key=' + API_KEY;
 		url += '&page=' + page;
 		url += category !== null ? '&category=' + category : '';
 
@@ -70,24 +66,23 @@ var app = function () {
 	}
 
 	function _setNotice (label) {
-		var notice = document.getElementById('notice');
+		const notice = document.getElementById('notice');
 		notice.innerHTML = label;
 	}
 
 	function _renderPosts (posts) {
-		var container = document.getElementById('container');
+		const container = document.getElementById('container');
 
 		posts.forEach(function (post) {
-			var template = document.getElementById('article-template').innerHTML;
-
-			template = template.replace('{{ title }}', post.title);
-			template = template.replace('{{ author }}', post.author);
-			template = template.replace('{{ date }}', _formatDate(post.timestamp));
-			template = template.replace('{{ category }}', post.category);
-			template = template.replace('{{ content }}', _formatContent(post.content));
-
-			var article = document.createElement('article');
-			article.innerHTML = template;
+			const article = document.createElement('article');
+			article.innerHTML = `
+				<h2>${post.title}</h2>
+				<div class="article-details">
+					<div>By ${post.author} on ${_formatDate(post.timestamp)}</div>
+					<div>Posted in <a href="#">${post.category}</a></div>
+				</div>
+				${_formatContent(post.content)}
+			`;
 			container.appendChild(article);
 		});
 	}
@@ -98,30 +93,13 @@ var app = function () {
 
 	function _formatContent (string) {
 		return string.split('\n')
-			.filter(_hasContent)
-			.map(_wrapParagraphTags)
+			.filter((str) => str !== '')
+			.map((str) => `<p>${str}</p>`)
 			.join('');
-	}
-
-	function _hasContent (string) {
-		return string !== '';
-	}
-
-	function _wrapParagraphTags (string) {
-		return '<p>' + string + '</p>';
 	}
 
 	function _capitalize (label) {
 		return label.slice(0, 1).toUpperCase() + label.slice(1).toLowerCase();
-	}
-
-	function _setActiveCategory (category) {
-		if (categories.indexOf(category.toLowerCase()) === -1) {
-			return false;
-		}
-
-		state.activeCategory = category;
-		return true;
 	}
 
 	function _resetActivePage () {
