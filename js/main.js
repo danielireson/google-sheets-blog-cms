@@ -79,7 +79,7 @@ const app = function () {
 				<h2>${post.title}</h2>
 				<div class="article-details">
 					<div>By ${post.author} on ${_formatDate(post.timestamp)}</div>
-					<div>Posted in <a href="#">${post.category}</a></div>
+					<div>Posted in <em>${post.category}</em></div>
 				</div>
 				${_formatContent(post.content)}
 			`;
