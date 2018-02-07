@@ -6,7 +6,6 @@ var app = function () {
 	var state = {
 		activePage: 1,
 		activeCategory: null,
-		posts: []
 	};
 
 	function init () {
@@ -15,41 +14,29 @@ var app = function () {
 		var filter = document.getElementById('filter');
 		_buildFilter(filter);
 
-		_getPosts(state.activePage, state.activeCategory);
+		_getPosts();
 	}
 
-	function _getPosts(page, category) {
-		var requestUrl = _buildApiUrl(page, category);
-		_getRequest(requestUrl, function (error, data) {
-			if (error) {
+	function _getPosts() {
+		_setNotice('Loading posts');
+		
+		var container = document.getElementById('container');
+		container.innerHTML = '';
+
+		var requestUrl = _buildApiUrl(state.activePage, state.activeCategory);
+		fetch(requestUrl)
+			.then((response) => response.json())
+			.then((json) => {
+				if (json.status !== 'success') {
+					_setNotice(json.message);
+				}
+
+				_renderPosts(json.data);
+				_setNotice('No more posts to display');
+			})
+			.catch((error) => {
 				_setNotice('Unexpected error loading posts');
-			}
-
-			response = JSON.parse(data);
-
-			if (response.status !== 'success') {
-				_setNotice(response.message);
-			}
-
-			state.posts = response.data;
-
-			var container = document.getElementById('container');
-			_renderPosts(container);
-
-			_setNotice('No more posts to display');
-		})
-	}
-
-	function _getRequest(url, callback) {
-		var request = new XMLHttpRequest();
-		request.open('get', url);
-		request.onload = function () {
-			callback(null, request.response);
-		};
-		request.onerror = function () {
-			callback(request.response);
-		};
-		request.send();
+			})
 	}
 
 	function _buildFilter (filter) {
@@ -61,10 +48,14 @@ var app = function () {
 	}
 
 	function _buildFilterLink (label, isSelected) {
-		var link = document.createElement('a');
-    	link.setAttribute('href', '#');
+		var link = document.createElement('button');
 	  	link.className = isSelected ? 'button selected' : 'button';
 	  	link.innerHTML = _capitalize(label);
+	  	link.onclick = function (event) {
+	  		_resetActivePage();
+	  		_setActiveCategory(label);
+	  		_getPosts();
+	  	};
 
 	  	return link;
 	}
@@ -83,8 +74,10 @@ var app = function () {
 		notice.innerHTML = label;
 	}
 
-	function _renderPosts (container) {
-		state.posts.forEach(function (post) {
+	function _renderPosts (posts) {
+		var container = document.getElementById('container');
+
+		posts.forEach(function (post) {
 			var template = document.getElementById('article-template').innerHTML;
 
 			template = template.replace('{{ title }}', post.title);
@@ -118,8 +111,8 @@ var app = function () {
 		return '<p>' + string + '</p>';
 	}
 
-	function _getActiveCategory () {
-		return state.category;
+	function _capitalize (label) {
+		return label.slice(0, 1).toUpperCase() + label.slice(1).toLowerCase();
 	}
 
 	function _setActiveCategory (category) {
@@ -127,11 +120,13 @@ var app = function () {
 			return false;
 		}
 
-		return state.activeCategory = category;
+		state.activeCategory = category;
+		return true;
 	}
 
-	function _capitalize (label) {
-		return label.slice(0, 1).toUpperCase() + label.slice(1).toLowerCase();
+	function _resetActivePage () {
+		state.activePage = 1;
+		return true;
 	}
 
 	return {
