@@ -16,7 +16,6 @@ a:hover {
 	border-color: #1a1a1a;
 }
 
-
 em {
 	border-bottom: solid 1px #b2bec3;
 	font-style: normal;
@@ -40,9 +39,7 @@ button:hover {
 }
 
 button.selected {
-	background: #2d3436;
-	border: 1px solid #2d3436;
-	color: white;
+	border-color: #2d3436;
 }
 
 header, main, footer {

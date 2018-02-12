@@ -38,16 +38,20 @@ const app = function () {
 	    page.filter.appendChild(_buildFilterLink('no filter', true));
 
 	    CATEGORIES.forEach(function (category) {
-	    	page.filter.appendChild(_buildFilterLink(category));
+	    	page.filter.appendChild(_buildFilterLink(category, false));
 	    });
 	}
 
 	function _buildFilterLink (label, isSelected) {
 		const link = document.createElement('button');
-	  	link.className = isSelected ? 'button selected' : 'button';
 	  	link.innerHTML = _capitalize(label);
+	  	link.classList = isSelected ? 'selected' : '';
 	  	link.onclick = function (event) {
 	  		_resetActivePage();
+
+	  		Array.from(page.filter.children).forEach(function (element) {
+	  			element.classList = label === element.innerHTML.toLowerCase() ? 'selected' : '';
+	  		});
 
 	  		let category = label === 'no filter' ? null : label.toLowerCase();
 	  		_getPosts(category);
