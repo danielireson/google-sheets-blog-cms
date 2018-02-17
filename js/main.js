@@ -122,12 +122,10 @@ const app = function () {
 
 	function _resetActivePage () {
 		state.activePage = 1;
-		return true;
 	}
 
 	function _incrementActivePage () {
 		state.activePage += 1;
-		return true;
 	}
 
 	function _setActiveCategory (category) {
@@ -137,8 +135,6 @@ const app = function () {
 		Array.from(page.filter.children).forEach(function (element) {
   			element.classList = label === element.innerHTML.toLowerCase() ? 'selected' : '';
   		});
-
-		return true;
 	}
 
 	return {
