@@ -3,7 +3,7 @@ const app = function () {
 	const API_KEY = 'abcdef';
 	const CATEGORIES = ['general', 'financial', 'technology', 'marketing'];
 
-	const state = {activePage: 1};
+	const state = {activePage: 1, activeCategory: null};
 	const page = {};
 
 	function init () {
@@ -12,14 +12,18 @@ const app = function () {
 		page.container = document.getElementById('container');
 
 		_buildFilter();
-		_getPosts(null);
+		_getNewPosts();
 	}
 
-	function _getPosts(category) {
-		_setNotice('Loading posts');
+	function _getNewPosts () {
 		page.container.innerHTML = '';
+		_getPosts();
+	}
 
-		fetch(_buildApiUrl(state.activePage, category))
+	function _getPosts () {
+		_setNotice('Loading posts');
+
+		fetch(_buildApiUrl(state.activePage, state.activeCategory))
 			.then((response) => response.json())
 			.then((json) => {
 				if (json.status !== 'success') {
@@ -27,7 +31,7 @@ const app = function () {
 				}
 
 				_renderPosts(json.data);
-				_setNotice('No more posts to display');
+				_renderPostsPagination(json.pages);
 			})
 			.catch((error) => {
 				_setNotice('Unexpected error loading posts');
@@ -47,14 +51,11 @@ const app = function () {
 	  	link.innerHTML = _capitalize(label);
 	  	link.classList = isSelected ? 'selected' : '';
 	  	link.onclick = function (event) {
-	  		_resetActivePage();
-
-	  		Array.from(page.filter.children).forEach(function (element) {
-	  			element.classList = label === element.innerHTML.toLowerCase() ? 'selected' : '';
-	  		});
-
 	  		let category = label === 'no filter' ? null : label.toLowerCase();
-	  		_getPosts(category);
+
+			_resetActivePage();
+	  		_setActiveCategory(category);
+	  		_getNewPosts();
 	  	};
 
 	  	return link;
@@ -88,6 +89,22 @@ const app = function () {
 		});
 	}
 
+	function _renderPostsPagination (pages) {
+		if (pages.next) {
+			const link = document.createElement('button');
+			link.innerHTML = 'Load more posts';
+			link.onclick = function (event) {
+				_incrementActivePage();
+				_getPosts();
+			};
+
+			page.notice.innerHTML = '';
+			page.notice.appendChild(link);
+		} else {
+			_setNotice('No more posts to display');
+		}
+	}
+
 	function _formatDate (string) {
 		return new Date(string).toLocaleDateString('en-GB');
 	}
@@ -105,6 +122,22 @@ const app = function () {
 
 	function _resetActivePage () {
 		state.activePage = 1;
+		return true;
+	}
+
+	function _incrementActivePage () {
+		state.activePage += 1;
+		return true;
+	}
+
+	function _setActiveCategory (category) {
+		state.activeCategory = category;
+		
+		const label = category === null ? 'no filter' : category;
+		Array.from(page.filter.children).forEach(function (element) {
+  			element.classList = label === element.innerHTML.toLowerCase() ? 'selected' : '';
+  		});
+
 		return true;
 	}
 
